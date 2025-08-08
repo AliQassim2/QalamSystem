@@ -33,6 +33,17 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+
+    //Role of users
+    public const ROLES = [
+        'ادمن',
+        'مدير',
+        'مسؤول ادارة الحسابات',
+        'مسؤول ادارة المدرسة',
+        'معلم',
+        'طالب',
+    ];
+
     /**
      * Get the attributes that should be cast.
      *

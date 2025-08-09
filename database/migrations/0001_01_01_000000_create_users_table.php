@@ -21,11 +21,14 @@ return new class extends Migration
             $table->tinyInteger('state')->default(0);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->rememberToken();
-            $table->timestamps();
+            // Custom token system
+            $table->string('tokenremember')->nullable();
+            $table->timestamp('token_expires_at')->nullable();
+            $table->string('code_login')->nullable();
 
-            $table->foreignId('created_by')->nullable()->constrained('users')->restrictOnDelete();
-            $table->foreignId('updated_by')->nullable()->constrained('users')->restrictOnDelete();
+            $table->timestamps();
+            $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

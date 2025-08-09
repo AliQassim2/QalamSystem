@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use App\Models\User;
 use Carbon\Carbon;
+use App\Mail\LoginCodeMail;
+use Illuminate\Support\Facades\Mail;
 
 class LoginController extends Controller
 {
@@ -72,13 +74,29 @@ class LoginController extends Controller
     }
 
     // Optional: regenerate code for code login
-    public function generateLoginCode($id)
+    public function sendLoginCode(Request $request)
     {
-        $user = User::findOrFail($id);
+        $login = $request->query('login'); // from GET param
+
+        if (!$login) {
+            return back()->with('error', 'Please enter your email, username, or phone first.');
+        }
+
+        // Find user by email, phone, or username
+        $user = User::where('email', $login)
+            ->orWhere('phone', $login)
+            ->orWhere('username', $login)
+            ->first();
+
+        if (!$user) {
+            return back()->with('error', 'User not found.');
+        }
         $user->code_login = rand(100000, 999999); // 6-digit code
         $user->save();
 
         // Here you can send code via email/SMS
-        return back()->with('success', 'New login code generated.');
+        Mail::to($user->email)->queue(new LoginCodeMail($user->code_login));
+
+        return back()->with('success', 'A login code has been sent to your email.');
     }
 }

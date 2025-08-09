@@ -6,12 +6,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(App\Http\Middleware\CustomGuest::class)->group(function () {
     Route::get('/login', [App\Http\Controllers\Auth\LoginController::class, 'showLoginForm'])->name('login')->withoutMiddleware(App\Http\Middleware\CustomAuth::class);
     Route::post('/login', [App\Http\Controllers\Auth\LoginController::class, 'login'])->name('login.post');
-    Route::get(
-        '/send-login-code',
-        function () {
-            return "hello";
-        }
-    )->name('send.login.code');
+    Route::get('/send-login-code', [App\Http\Controllers\Auth\LoginController::class, 'sendLoginCode'])->name('send.login.code');
 });
 
 Route::middleware(App\Http\Middleware\CustomAuth::class)->group(function () {

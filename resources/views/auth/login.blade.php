@@ -143,7 +143,7 @@
                 return;
             }
 
-            window.location.href = `/send-login-code?login=${encodeURIComponent(loginValue)}`;
+            window.location.href = `{{ route('send.login.code') }}?login=${encodeURIComponent(loginValue)}`;
         });
     </script>
 

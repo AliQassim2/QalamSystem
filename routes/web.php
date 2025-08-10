@@ -15,7 +15,9 @@ Route::middleware(App\Http\Middleware\CustomAuth::class)->group(function () {
     Route::get('/', function () {
         return view('welcome');
     })->name('home');
-    require_once 'Admin.php';
+    Route::middleware(App\Http\Middleware\isAdmin::class)->group(function () {
+        require_once 'Admin.php';
+    });
     require_once 'School Manager.php';
     require_once 'Structure Manager.php';
     require_once 'Student.php';

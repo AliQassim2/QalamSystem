@@ -14,7 +14,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('logo_path')->nullable();
             $table->string('address')->nullable();
-            $table->enum('type', ['ابتدائي', 'متوسط', 'ثانوي', 'اعدادي']);
+            $table->tinyInteger('type')->comment('1: ابتدائي, 2: متوسط, 3: ثانوي, 4: اعدادي');
             $table->timestamps();
             $table->softDeletes();
 
@@ -55,7 +55,6 @@ return new class extends Migration
             $table->string('name');
             $table->timestamps();
             $table->softDeletes();
-
             $table->foreignId('stage_id')->nullable()->constrained('stages')->restrictOnDelete()->cascadeOnUpdate();
             $table->foreignId('created_by')->nullable()->constrained('users')->restrictOnDelete()->cascadeOnUpdate();
             $table->foreignId('updated_by')->nullable()->constrained('users')->restrictOnDelete()->cascadeOnUpdate();
@@ -68,7 +67,7 @@ return new class extends Migration
             $table->string('name');
             $table->timestamps();
             $table->softDeletes();
-
+            $table->foreignId('user_id')->nullable()->constrained('users')->restrictOnDelete()->cascadeOnUpdate();
             $table->foreignId('school_id')->nullable()->constrained('schools')->restrictOnDelete()->cascadeOnUpdate();
             $table->foreignId('created_by')->nullable()->constrained('users')->restrictOnDelete()->cascadeOnUpdate();
             $table->foreignId('updated_by')->nullable()->constrained('users')->restrictOnDelete()->cascadeOnUpdate();
@@ -89,7 +88,7 @@ return new class extends Migration
             $table->string('name');
             $table->timestamps();
             $table->softDeletes();
-
+            $table->foreignId('user_id')->nullable()->constrained('users')->restrictOnDelete()->cascadeOnUpdate();
             $table->foreignId('class_id')->nullable()->constrained('classes')->restrictOnDelete()->cascadeOnUpdate();
             $table->foreignId('created_by')->nullable()->constrained('users')->restrictOnDelete()->cascadeOnUpdate();
             $table->foreignId('updated_by')->nullable()->constrained('users')->restrictOnDelete()->cascadeOnUpdate();

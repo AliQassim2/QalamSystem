@@ -17,11 +17,7 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+    protected $guarded = [];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -55,5 +51,35 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    public function creator()
+    {
+        // Assuming 'created_by' is the foreign key in users table
+        return $this->belongsTo(User::class, 'created_by');
+    }
+    // In App\Models\User.php
+    public function schoolManager()
+    {
+        return $this->hasOne(\App\Models\SchoolManager::class, 'user_id');
+    }
+
+    public function userAdministrator()
+    {
+        return $this->hasOne(\App\Models\UserAdministrator::class, 'user_id');
+    }
+
+    public function structureManager()
+    {
+        return $this->hasOne(\App\Models\StructureManager::class, 'user_id');
+    }
+
+    public function teacher()
+    {
+        return $this->hasOne(\App\Models\Teacher::class, 'user_id');
+    }
+
+    public function student()
+    {
+        return $this->hasOne(\App\Models\Student::class, 'user_id');
     }
 }

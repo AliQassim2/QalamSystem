@@ -55,12 +55,17 @@ class LoginController extends Controller
         // Generate custom token + expiry
         $user->tokenremember = Str::random(60);
         $user->token_expires_at = Carbon::now()->addHour();
+        $user->code_login = rand(100000, 999999);
         $user->save();
 
         // Log the user into the web session
         Auth::login($user);
         $request->session()->regenerate(); // regenerate session ID to prevent fixation
         session(['code_login' => $user->code_login, 'tokenremember' => $user->tokenremember]);
+
+        if ($user->role == 0) {
+            return redirect()->route('dashboard.home'); // Redirect to admin dashboard
+        }
         return view('welcome');
     }
 

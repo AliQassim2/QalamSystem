@@ -16,9 +16,7 @@ class UsersController extends Controller
             'creator',
             'schoolManager.school',
             'userAdministrator.school',
-            'structureManager.school',
-            'teacher.school',
-            'student.school'
+            'structureManager.school'
         ])
             ->paginate(15);
 

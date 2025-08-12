@@ -20,11 +20,12 @@ class CustomAuth
 
         // If token is missing or expired
         if (
-            session('tokenremember') !== $user->tokenremember ||
-            session('code_login') !== $user->code_login ||
+            session('tokenremember') != $user->tokenremember ||
+            session('code_login') != $user->code_login ||
             !$user->token_expires_at ||
             Carbon::now()->greaterThan($user->token_expires_at)
         ) {
+
             Auth::logout();
             return redirect()->route('login')->with('error', 'Your session has expired. Please login again.');
         }

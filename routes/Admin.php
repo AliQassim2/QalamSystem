@@ -13,6 +13,7 @@ Route::prefix('Dashboard')->group(function () {
     Route::get('/schools.edit/{school}', [SchoolController::class, 'edit'])->name('dashboard.schools.edit');
     Route::put('/schools.edit/{school}', [SchoolController::class, 'update'])->name('dashboard.schools.update');
     Route::delete('/schools.destroy/{school}', [SchoolController::class, 'destroy'])->name('dashboard.schools.destroy');
+    Route::get('/schools.show/{school}', [SchoolController::class, 'show'])->name('dashboard.schools.show');
     Route::get('/users', [UsersController::class, 'index'])->name('dashboard.users.index');
     Route::patch('/users/{user}/toggle-state', [UsersController::class, 'toggleState'])->name('dashboard.users.toggle-state');
     Route::get('/users.create', [UsersController::class, 'create'])->name('dashboard.users.create');

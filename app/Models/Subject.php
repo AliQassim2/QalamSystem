@@ -26,4 +26,8 @@ class Subject extends Model
     {
         return $this->hasMany(Link::class);
     }
+    public function teachers()
+    {
+        return $this->hasMany(Teacher::class, 'subject_teacher', 'subject_id', 'teacher_id');
+    }
 }

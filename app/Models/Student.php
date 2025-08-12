@@ -9,13 +9,7 @@ class Student extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = [
-        'name',
-        'class_id',
-        'created_by',
-        'updated_by',
-        'deleted_by'
-    ];
+    protected $guarded = [];
 
     public function class()
     {
@@ -25,5 +19,9 @@ class Student extends Model
     public function grades()
     {
         return $this->hasMany(Grade::class);
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

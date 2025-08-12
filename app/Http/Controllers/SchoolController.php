@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\School;
+use Illuminate\Database\Events\QueryExecuted;
+use Illuminate\Database\QueryException;
 
 class SchoolController extends Controller
 {
@@ -63,7 +65,7 @@ class SchoolController extends Controller
             $path = $request->file('logo')->store('school_logos', 'public');
             $validated['logo_path'] = 'storage/' . $path; // Accessible from public
         }
-
+        $validated['created_by'] = auth()->id(); // Set the creator ID
         // Create the school
         School::create($validated);
 
@@ -99,12 +101,30 @@ class SchoolController extends Controller
     }
     public function destroy(School $school)
     {
-        // Soft delete the school
-        $school->delete();
+        try {
+            // Soft delete the school
+            $school->delete();
 
-        // Redirect with success message
-        return redirect()
-            ->route('dashboard.schools')
-            ->with('success', 'School deleted successfully.');
+            // Redirect with success message
+            return redirect()
+                ->route('dashboard.schools')
+                ->with('success', 'School deleted successfully.');
+        } catch (QueryException $e) {
+            // Check if it's a foreign key constraint violation
+            if ($e->errorInfo[1] == 1451) {
+                return redirect()
+                    ->route('dashboard.schools')
+                    ->with('error', 'Cannot delete school with existing related records.');
+            }
+            // Handle any other errors
+            return redirect()
+                ->route('dashboard.schools')
+                ->with('error', 'Failed to delete school.');
+        }
+    }
+    public function show(School $school)
+    {
+        $school->load(['students.user', 'teachers', 'creator', 'stages', 'classes', 'subjects']);
+        return view('dashboard.schools.show', compact('school'));
     }
 }

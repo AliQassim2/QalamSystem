@@ -9,13 +9,7 @@ class Teacher extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = [
-        'name',
-        'school_id',
-        'created_by',
-        'updated_by',
-        'deleted_by'
-    ];
+    protected $guarded = [];
 
     public function school()
     {
@@ -25,5 +19,9 @@ class Teacher extends Model
     public function links()
     {
         return $this->hasMany(Link::class);
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

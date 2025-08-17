@@ -19,8 +19,12 @@ Route::middleware(App\Http\Middleware\CustomAuth::class)->group(function () {
     Route::middleware(App\Http\Middleware\isAdmin::class)->group(function () {
         require_once 'Admin.php';
     });
+
     require_once 'School Manager.php';
-    require_once 'Structure Manager.php';
+
+    Route::middleware(App\Http\Middleware\isStructureManager::class)->group(function () {
+        require_once 'Structure Manager.php';
+    });
     require_once 'Student.php';
     require_once 'Teacher.php';
     require_once 'User Administrator.php';

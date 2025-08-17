@@ -75,7 +75,7 @@ class UsersController extends Controller
 
         $activeUsers = User::where('state', 1)->count();
 
-        return view('dashboard.Users.index', compact('users', 'roleStats', 'roleNames', 'userSchools', 'activeUsers'));
+        return view('Dashboard.Users.index', compact('users', 'roleStats', 'roleNames', 'userSchools', 'activeUsers'));
     }
 
     public function toggleState(User $user)
@@ -91,7 +91,7 @@ class UsersController extends Controller
     public function create()
     {
         $schools = School::orderBy('name')->get();
-        return view('dashboard.Users.form', compact('schools'));
+        return view('Dashboard.Users.form', compact('schools'));
     }
 
     public function store(Request $request)
@@ -125,7 +125,7 @@ class UsersController extends Controller
         ]);
 
 
-        return redirect()->route('dashboard.users.index')
+        return redirect()->route('Dashboard.users.index')
             ->with('success', 'User created successfully.');
     }
 
@@ -133,7 +133,7 @@ class UsersController extends Controller
     public function edit(User $user)
     {
         $schools = School::orderBy('name')->get();
-        return view('dashboard.Users.form', compact('user', 'schools'));
+        return view('Dashboard.Users.form', compact('user', 'schools'));
     }
     public function update(Request $request, User $user)
     {
@@ -157,7 +157,7 @@ class UsersController extends Controller
             'password' => $request->password ? bcrypt($request->password) : $user->password,
         ]);
 
-        return redirect()->route('dashboard.users.index')
+        return redirect()->route('Dashboard.users.index')
             ->with('success', 'User updated successfully.');
     }
 
@@ -166,12 +166,12 @@ class UsersController extends Controller
         try {
             $user->delete();
 
-            return redirect()->route('dashboard.users.index')
+            return redirect()->route('Dashboard.users.index')
                 ->with('success', 'User deleted successfully.');
         } catch (QueryException $e) {
             // Check if it's a foreign key constraint violation
             if ($e->errorInfo[1] == 1451) {
-                return redirect()->route('dashboard.users.index')
+                return redirect()->route('Dashboard.users.index')
                     ->with('error', 'Cannot delete this user because they have actions linked to other records.');
             }
 

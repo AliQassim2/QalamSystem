@@ -1,4 +1,4 @@
-@extends('dashboard.header')
+@extends('Dashboard.header')
 
 @section('content')
 <div class="users-container">
@@ -17,7 +17,7 @@
                 <button type="button" class="btn btn-primary add-user-btn" data-bs-toggle="modal"
                     data-bs-target="#addUserModal">
                     <i class="bi bi-person-plus"></i>
-                    <a href="{{ route('dashboard.users.create') }}">
+                    <a href="{{ route('Dashboard.users.create') }}">
                         Add New User
                     </a>
                 </button>
@@ -237,7 +237,7 @@
 
 <!-- Hidden Delete Forms for each user -->
 @foreach($users as $user)
-<form id="deleteForm{{ $user->id }}" action="{{ route('dashboard.users.destroy', $user) }}" method="POST" style="display: none;">
+<form id="deleteForm{{ $user->id }}" action="{{ route('Dashboard.users.destroy', $user) }}" method="POST" style="display: none;">
     @csrf
     @method('DELETE')
 </form>

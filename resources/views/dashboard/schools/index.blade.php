@@ -1,4 +1,4 @@
-@extends('dashboard.header')
+@extends('Dashboard.header')
 
 @section('content')
 <div class="schools-container">
@@ -16,7 +16,7 @@
             <div class="header-actions">
                 <button type="button" class="btn btn-primary add-school-btn" data-bs-toggle="modal"
                     data-bs-target="#addSchoolModal">
-                    <a href="{{ route('dashboard.schools.create') }}">
+                    <a href="{{ route('Dashboard.schools.create') }}">
                         <i class="bi bi-plus-circle"></i>
                         Add New School
                     </a>
@@ -140,7 +140,7 @@
 
 <!-- Hidden Delete Forms for each school -->
 @foreach($schools as $school)
-<form id="deleteSchoolForm{{ $school->id }}" action="{{ route('dashboard.schools.destroy', $school) }}" method="POST" style="display: none;">
+<form id="deleteSchoolForm{{ $school->id }}" action="{{ route('Dashboard.schools.destroy', $school) }}" method="POST" style="display: none;">
     @csrf
     @method('DELETE')
 </form>

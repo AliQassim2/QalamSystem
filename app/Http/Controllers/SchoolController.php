@@ -37,16 +37,16 @@ class SchoolController extends Controller
         // Calculate statistics
         $stats = $this->calculateSchoolStats();
 
-        return view('dashboard.schools.index', compact('schools', 'stats'));
+        return view('Dashboard.schools.index', compact('schools', 'stats'));
     }
     public function create()
     {
-        return view('dashboard.schools.form');
+        return view('Dashboard.schools.form');
     }
 
     public function edit(School $school)
     {
-        return view('dashboard.schools.form', compact('school'));
+        return view('Dashboard.schools.form', compact('school'));
     }
 
     public function store(Request $request)
@@ -71,7 +71,7 @@ class SchoolController extends Controller
 
         // Redirect with success message
         return redirect()
-            ->route('dashboard.schools')
+            ->route('Dashboard.schools')
             ->with('success', 'School created successfully.');
     }
 
@@ -96,7 +96,7 @@ class SchoolController extends Controller
 
         // Redirect with success message
         return redirect()
-            ->route('dashboard.schools')
+            ->route('Dashboard.schools')
             ->with('success', 'School updated successfully.');
     }
     public function destroy(School $school)
@@ -107,24 +107,24 @@ class SchoolController extends Controller
 
             // Redirect with success message
             return redirect()
-                ->route('dashboard.schools')
+                ->route('Dashboard.schools')
                 ->with('success', 'School deleted successfully.');
         } catch (QueryException $e) {
             // Check if it's a foreign key constraint violation
             if ($e->errorInfo[1] == 1451) {
                 return redirect()
-                    ->route('dashboard.schools')
+                    ->route('Dashboard.schools')
                     ->with('error', 'Cannot delete school with existing related records.');
             }
             // Handle any other errors
             return redirect()
-                ->route('dashboard.schools')
+                ->route('Dashboard.schools')
                 ->with('error', 'Failed to delete school.');
         }
     }
     public function show(School $school)
     {
         $school->load(['students.user', 'teachers', 'creator', 'stages', 'classes', 'subjects']);
-        return view('dashboard.schools.show', compact('school'));
+        return view('Dashboard.schools.show', compact('school'));
     }
 }

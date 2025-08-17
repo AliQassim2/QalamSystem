@@ -15,14 +15,15 @@
 
         <!-- Left side -->
         <nav class="flex items-center space-x-6">
-            <a href="{{ route('Dashboard.home') }}" class="text-gray-700 hover:text-blue-500 font-medium">Home</a>
-            <a href="{{ route('Dashboard.users.index') }}" class="text-gray-700 hover:text-blue-500 font-medium">Users</a>
-            <a href="{{ route('Dashboard.schools') }}" class="text-gray-700 hover:text-blue-500 font-medium">Schools</a>
+            <a href="{{ route('StructureManager.home') }}" class="text-gray-700 hover:text-blue-500 font-medium">Home</a>
+            <a href="{{ route('StructureManager.Stages') }}" class="text-gray-700 hover:text-blue-500 font-medium">Stages</a>
+            <a href="{{ route('StructureManager.Classes') }}" class="text-gray-700 hover:text-blue-500 font-medium">Classes</a>
+            <a href="{{ route('StructureManager.Subjects') }}" class="text-gray-700 hover:text-blue-500 font-medium">Subject</a>
         </nav>
 
         <!-- Right side -->
         <div class="flex items-center space-x-4">
-            <span class="text-gray-700 font-semibold">{{ auth()->user()->name ?? 'Guest' }}</span>
+            <span class="text-gray-700 font-semibold">{{ auth()->user()->name  }}</span>
             <a href="{{ route('logout') }}" class="text-red-500 hover:underline">Logout</a>
         </div>
 

@@ -13,12 +13,12 @@ class DashboardController extends Controller
         $TotalStudents = \App\Models\Student::whereYear('created_at', $request->input('year', now()->year))->count();
         $TotalSchools = \App\Models\School::whereYear('created_at', $request->input('year', now()->year))->count();
         $TotalTeachers = \App\Models\Teacher::whereYear('created_at', $request->input('year', now()->year))->count();
-        return view('dashboard.index', compact('TotalUsers', 'TotalStudents', 'TotalSchools', 'TotalTeachers'));
+        return view('Dashboard.index', compact('TotalUsers', 'TotalStudents', 'TotalSchools', 'TotalTeachers'));
     }
 
     public function viewUsers()
     {
         $users = \App\Models\User::all();
-        return view('dashboard.Users.index', compact('users'));
+        return view('Dashboard.Users.index', compact('users'));
     }
 }

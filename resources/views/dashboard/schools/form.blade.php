@@ -1,4 +1,4 @@
-@extends('dashboard.header')
+@extends('Dashboard.header')
 
 @section('content')
 <div class="form-container">
@@ -15,7 +15,7 @@
                 </p>
             </div>
             <div class="header-actions">
-                <a href="{{ route('dashboard.schools') }}" class="btn btn-outline-secondary">
+                <a href="{{ route('Dashboard.schools') }}" class="btn btn-outline-secondary">
                     <i class="bi bi-arrow-left"></i>
                     Back to Schools
                 </a>
@@ -25,7 +25,7 @@
 
     <!-- Form Section -->
     <div class="form-wrapper">
-        <form action="{{ isset($school) ? route('dashboard.schools.update', $school) : route('dashboard.schools.store') }}"
+        <form action="{{ isset($school) ? route('Dashboard.schools.update', $school) : route('Dashboard.schools.store') }}"
             method="POST"
             enctype="multipart/form-data"
             class="school-form"
@@ -175,7 +175,7 @@
                     <i class="bi bi-check-circle"></i>
                     {{ isset($school) ? 'Update School' : 'Create School' }}
                 </button>
-                <a href="{{ route('dashboard.schools') }}" class="btn btn-outline-secondary btn-lg">
+                <a href="{{ route('Dashboard.schools') }}" class="btn btn-outline-secondary btn-lg">
                     <i class="bi bi-x-circle"></i>
                     Cancel
                 </a>

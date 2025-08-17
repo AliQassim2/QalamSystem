@@ -1,21 +1,21 @@
-@extends('dashboard.header')
+@extends('Dashboard.header')
 
 @section('content')
-<div class="dashboard-container">
+<div class="Dashboard-container">
     <!-- Header Section -->
-    <div class="dashboard-header">
+    <div class="Dashboard-header">
         <div class="header-content">
             <div class="title-section">
-                <h1 class="dashboard-title">
+                <h1 class="Dashboard-title">
                     <i class="bi bi-speedometer2"></i>
                     Dashboard Overview
                 </h1>
-                <p class="dashboard-subtitle">Welcome back! Here's what's happening with your platform.</p>
+                <p class="Dashboard-subtitle">Welcome back! Here's what's happening with your platform.</p>
             </div>
 
             <!-- Controls Section -->
             <div class="controls-section">
-                <form method="GET" action="{{ route('dashboard.home') }}" class="year-selector">
+                <form method="GET" action="{{ route('Dashboard.home') }}" class="year-selector">
                     <div class="input-group">
                         <span class="input-group-text">
                             <i class="bi bi-calendar3"></i>
@@ -146,11 +146,11 @@
             Quick Actions
         </h2>
         <div class="actions-grid">
-            <a href="{{ route('dashboard.users.create') }}" class="action-card">
+            <a href="{{ route('Dashboard.users.create') }}" class="action-card">
                 <i class="bi bi-person-plus-fill"></i>
                 <span>Add User</span>
             </a>
-            <a href="{{ route('dashboard.schools.create') }}" class="action-card">
+            <a href="{{ route('Dashboard.schools.create') }}" class="action-card">
                 <i class="bi bi-building-add"></i>
                 <span>New School</span>
             </a>
@@ -174,14 +174,14 @@
         --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    .dashboard-container {
+    .Dashboard-container {
         padding: 2rem;
         background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
         min-height: 100vh;
     }
 
     /* Header Styles */
-    .dashboard-header {
+    .Dashboard-header {
         margin-bottom: 2rem;
     }
 
@@ -202,7 +202,7 @@
         flex: 1;
     }
 
-    .dashboard-title {
+    .Dashboard-title {
         font-size: 2.5rem;
         font-weight: 700;
         background: var(--primary-gradient);
@@ -215,7 +215,7 @@
         gap: 0.5rem;
     }
 
-    .dashboard-subtitle {
+    .Dashboard-subtitle {
         color: #64748b;
         font-size: 1.1rem;
         margin: 0;
@@ -489,7 +489,7 @@
 
     /* Responsive Design */
     @media (max-width: 768px) {
-        .dashboard-container {
+        .Dashboard-container {
             padding: 1rem;
         }
 
@@ -503,7 +503,7 @@
             justify-content: center;
         }
 
-        .dashboard-title {
+        .Dashboard-title {
             font-size: 2rem;
             justify-content: center;
         }

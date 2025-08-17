@@ -62,10 +62,14 @@ class LoginController extends Controller
         Auth::login($user);
         $request->session()->regenerate(); // regenerate session ID to prevent fixation
         session(['code_login' => $user->code_login, 'tokenremember' => $user->tokenremember]);
-
-        if ($user->role == 0) {
-            return redirect()->route('dashboard.home'); // Redirect to admin dashboard
+        switch ($user->role) {
+            case 0:
+                return redirect()->route('Dashboard.home'); // Redirect to admin Dashboard
+            case 3:
+                return redirect()->route('StructureManager.home'); // Redirect to school structure
         }
+
+
         return view('welcome');
     }
 

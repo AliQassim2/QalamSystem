@@ -1,9 +1,9 @@
-@extends('dashboard.header')
+@extends('Dashboard.header')
 @section('content')
 <div class="school-detail-container">
     <!-- Back Button -->
     <div class="back-section">
-        <a href="{{ route('dashboard.schools') }}" class="back-btn">
+        <a href="{{ route('Dashboard.schools') }}" class="back-btn">
             <i class="bi bi-arrow-left"></i>
             Back to Schools
         </a>
@@ -394,7 +394,7 @@
 </div>
 
 <!-- Hidden Delete Form -->
-<form id="deleteSchoolForm{{ $school->id }}" action="{{ route('dashboard.schools.destroy', $school) }}" method="POST" style="display: none;">
+<form id="deleteSchoolForm{{ $school->id }}" action="{{ route('Dashboard.schools.destroy', $school) }}" method="POST" style="display: none;">
     @csrf
     @method('DELETE')
 </form>

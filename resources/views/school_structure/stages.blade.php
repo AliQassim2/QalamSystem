@@ -278,27 +278,16 @@
                     <td>{{ $stage->created_at->format('M d, Y') }}</td>
                     <td>
                         <div style="display: flex; gap: 4px;">
-                            @if(!$stage->deleted_at)
                             <!-- Edit Button -->
                             <button onclick="editStage({{ $stage->id }}, '{{ $stage->name }}', {{ $stage->school_id ?? 'null' }})"
                                 class="btn btn-warning" style="padding: 6px 12px; font-size: 12px;">
                                 Edit
                             </button>
-
-
-
                             <!-- Delete Button -->
-                            <button onclick="deleteStage({{ $stage->id }}, '{{ $stage->name }}', {{ ($stage->classes_count ?? 0) + ($stage->subjects_count ?? 0) }})"
+                            <button onclick="deleteStage({{ $stage->id }}, '{{ $stage->name }}', {{ ($stage->classes->count() ?? 0) + ($stage->subjects->count() ?? 0) }})"
                                 class="btn btn-danger" style="padding: 6px 12px; font-size: 12px;">
                                 Delete
                             </button>
-                            @else
-                            <!-- Enable Button -->
-                            <button onclick="enableStage({{ $stage->id }}, '{{ $stage->name }}')"
-                                class="btn btn-success" style="padding: 6px 12px; font-size: 12px;">
-                                Enable
-                            </button>
-                            @endif
                         </div>
                     </td>
                 </tr>
@@ -356,17 +345,6 @@
                 <label class="form-label" for="edit_name">Stage Name *</label>
                 <input type="text" id="edit_name" name="name" class="form-input" required>
             </div>
-
-            <div class="form-group">
-                <label class="form-label" for="edit_school_id">School (Optional)</label>
-                <select id="edit_school_id" name="school_id" class="form-input">
-                    <option value="">Select a school</option>
-                    @foreach($schools ?? [] as $school)
-                    <option value="{{ $school->id }}">{{ $school->name }}</option>
-                    @endforeach
-                </select>
-            </div>
-
             <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
                 <button type="button" onclick="closeModal('editModal')" class="btn btn-secondary">Cancel</button>
                 <button type="submit" class="btn btn-warning">Update Stage</button>
@@ -407,10 +385,9 @@
     }
 
     // Edit stage function
-    function editStage(id, name, schoolId) {
+    function editStage(id, name) {
         document.getElementById('edit_name').value = name;
-        document.getElementById('edit_school_id').value = schoolId || '';
-        document.getElementById('editForm').action = `/stages/${id}`;
+        document.getElementById('editForm').action = `stages/${id}`;
         openModal('editModal');
     }
 
@@ -448,7 +425,7 @@
                 // Create form and submit
                 const form = document.createElement('form');
                 form.method = 'POST';
-                form.action = `/stages/${id}`;
+                form.action = `stages/${id}`;
                 form.innerHTML = `
                 @csrf
                 @method('DELETE')
@@ -461,12 +438,11 @@
         openModal('deleteModal');
     }
 
-    openModal('disableModal');
 
 
     // Close modal when clicking outside
     window.onclick = function(event) {
-        const modals = ['addModal', 'editModal', 'deleteModal', 'disableModal'];
+        const modals = ['addModal', 'editModal', 'deleteModal'];
         modals.forEach(modalId => {
             const modal = document.getElementById(modalId);
             if (event.target === modal) {

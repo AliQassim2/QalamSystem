@@ -14,13 +14,13 @@ class GeneralController extends Controller
     {
         $school = Auth::user()->structureManager->school;
 
-        $stageCount = $school->stages()->count();
-        $classCount = $school->classes()->count();
-        $subjectCount = $school->subjects()->count();
-        return view('school_structure.index', [
-            'stagesCount' => $stageCount,
-            'classesCount' => $classCount,
-            'subjectsCount' => $subjectCount,
-        ]);
+        $stagesCount = $school->stages()->count();
+        $classesCount = $school->classes()->count();
+        $subjectsCount = $school->subjects()->count();
+        return view('school_structure.index', compact([
+            'stagesCount',
+            'classesCount',
+            'subjectsCount',
+        ]));
     }
 }

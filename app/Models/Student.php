@@ -11,7 +11,7 @@ class Student extends Model
 
     protected $guarded = [];
 
-    public function class()
+    public function classes()
     {
         return $this->belongsTo(SchoolClass::class, 'class_id');
     }

@@ -3,29 +3,32 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\App;
 
-Route::middleware(App\Http\Middleware\CustomGuest::class)->group(function () {
-    Route::get('/login', [App\Http\Controllers\Auth\LoginController::class, 'showLoginForm'])->name('login')->withoutMiddleware(App\Http\Middleware\CustomAuth::class);
-    Route::post('/login', [App\Http\Controllers\Auth\LoginController::class, 'login'])->name('login.post');
-    Route::get('/send-login-code', [App\Http\Controllers\Auth\LoginController::class, 'sendLoginCode'])->name('send.login.code');
+Route::middleware(\App\Http\Middleware\CustomGuest::class)->group(function () {
+    Route::get('/login', [\App\Http\Controllers\Auth\LoginController::class, 'showLoginForm'])->name('login')->withoutMiddleware(App\Http\Middleware\CustomAuth::class);
+    Route::post('/login', [\App\Http\Controllers\Auth\LoginController::class, 'login'])->name('login.post');
+    Route::get('/send-login-code', [\App\Http\Controllers\Auth\LoginController::class, 'sendLoginCode'])->name('send.login.code');
 });
 
-Route::middleware(App\Http\Middleware\CustomAuth::class)->group(function () {
+Route::middleware(\App\Http\Middleware\CustomAuth::class)->group(function () {
 
-    Route::get('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
+    Route::get('/logout', [\App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
     Route::get('/', function () {
         return view('welcome');
     })->name('home');
-    Route::middleware(App\Http\Middleware\isAdmin::class)->group(function () {
+    Route::middleware(\App\Http\Middleware\isAdmin::class)->group(function () {
         require_once 'Admin.php';
     });
 
     require_once 'School Manager.php';
 
-    Route::middleware(App\Http\Middleware\isStructureManager::class)->group(function () {
+    Route::middleware(\App\Http\Middleware\isStructureManager::class)->group(function () {
         require_once 'Structure Manager.php';
+    });
+    Route::middleware(\App\Http\Middleware\isUserAdministrator::class)->group(function () {
+        require_once 'User Administrator.php';
     });
     require_once 'Student.php';
     require_once 'Teacher.php';
-    require_once 'User Administrator.php';
 });

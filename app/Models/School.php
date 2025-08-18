@@ -45,6 +45,20 @@ class School extends Model
         );
     }
 
+
+    public function SchoolManager()
+    {
+        return $this->hasMany(SchoolManager::class);
+    }
+    public function UserAdministrator()
+    {
+        return $this->hasMany(UserAdministrator::class);
+    }
+    public function StructureManager()
+    {
+        return $this->hasMany(StructureManager::class);
+    }
+
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by');

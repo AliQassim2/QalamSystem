@@ -64,9 +64,11 @@ class SchoolController extends Controller
             // Save to storage/app/public/school_logos
             $path = $request->file('logo')->store('school_logos', 'public');
             $validated['logo_path'] = 'storage/' . $path; // Accessible from public
+            unset($validated['logo']);
         }
         $validated['created_by'] = auth()->id(); // Set the creator ID
         // Create the school
+
         School::create($validated);
 
         // Redirect with success message

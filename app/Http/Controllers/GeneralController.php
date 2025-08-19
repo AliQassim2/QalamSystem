@@ -39,4 +39,13 @@ class GeneralController extends Controller
 
         return view('user_administrator.index', compact('studentCount', 'teacherCount'));
     }
+
+
+    public function getStageData(Stage $stage)
+    {
+        return response()->json([
+            'classes' => $stage->classes()->select('id', 'name')->get(),
+            'subjects' => $stage->subjects()->select('id', 'name')->get(),
+        ]);
+    }
 }

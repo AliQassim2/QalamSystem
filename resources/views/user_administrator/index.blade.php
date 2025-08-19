@@ -112,7 +112,7 @@
         <div class="stat-card stat-blue">
             <h3 style="font-size: 18px; font-weight: 600; color: #374151; margin-bottom: 12px;">Total Teacher</h3>
             <div class="stat-number blue-text">{{ $teacherCount ?? 0 }}</div>
-            <a href="" class="manage-link blue-text" style="color: #3b82f6;">
+            <a href="{{ route('account.teachers') }}" class="manage-link blue-text" style="color: #3b82f6;">
                 Manage Teacher →
             </a>
         </div>

@@ -43,6 +43,7 @@ class StudentController extends Controller
         $validatedDataStudent = $request->validate([
             'class_id' => 'required|exists:classes,id',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'status' => 'required|in:0,1,2',
         ]);
         // Handle photo upload if exists
         if ($request->hasFile('photo')) {

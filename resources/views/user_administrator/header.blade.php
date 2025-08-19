@@ -18,7 +18,7 @@
             <a href="{{ route('account.home') }}" class="text-gray-700 hover:text-blue-500 font-medium">Home</a>
             <a href="{{ route('account.students') }}"
                 class="text-gray-700 hover:text-blue-500 font-medium">Student</a>
-            <a href="{{ route('StructureManager.Classes') }}"
+            <a href="{{ route('account.teachers') }}"
                 class="text-gray-700 hover:text-blue-500 font-medium">Teacher</a>
 
         </nav>

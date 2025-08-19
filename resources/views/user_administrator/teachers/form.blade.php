@@ -1,4 +1,3 @@
-{{-- ADD STUDENT FORM --}}
 @extends('user_administrator.header')
 
 @section('content')
@@ -75,52 +74,6 @@
         box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
     }
 
-    .form-textarea {
-        width: 100%;
-        padding: 8px 12px;
-        border: 1px solid #d1d5db;
-        border-radius: 6px;
-        font-size: 14px;
-        resize: vertical;
-        min-height: 80px;
-    }
-
-    .form-textarea:focus {
-        outline: none;
-        border-color: #3b82f6;
-        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-    }
-
-    .form-select {
-        width: 100%;
-        padding: 8px 12px;
-        border: 1px solid #d1d5db;
-        border-radius: 6px;
-        font-size: 14px;
-        background: white;
-    }
-
-    .form-select:focus {
-        outline: none;
-        border-color: #3b82f6;
-        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-    }
-
-    .form-file {
-        width: 100%;
-        padding: 8px 12px;
-        border: 1px solid #d1d5db;
-        border-radius: 6px;
-        font-size: 14px;
-        background: white;
-    }
-
-    .form-file:focus {
-        outline: none;
-        border-color: #3b82f6;
-        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-    }
-
     .alert {
         padding: 12px 16px;
         margin-bottom: 16px;
@@ -169,15 +122,6 @@
         margin-top: 4px;
     }
 
-    .photo-preview {
-        margin-top: 8px;
-        max-width: 150px;
-        max-height: 150px;
-        border-radius: 8px;
-        border: 2px solid #e5e7eb;
-        display: none;
-    }
-
     .back-button {
         margin-bottom: 24px;
     }
@@ -209,8 +153,8 @@
 <div>
     <!-- Back Button -->
     <div class="back-button">
-        <a href="{{ route('account.students') }}" class="btn btn-secondary">
-            <span style="margin-right: 8px;">←</span> Go Back to Students
+        <a href="{{ route('account.teachers') }}" class="btn btn-secondary">
+            <span style="margin-right: 8px;">←</span> Go Back to Teachers
         </a>
     </div>
 
@@ -218,10 +162,10 @@
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
         <div>
             <h1 style="font-size: 28px; font-weight: bold; color: #1f2937; margin-bottom: 4px;">
-                {{ isset($student) ? 'Edit Student' : 'Add New Student' }}
+                {{ isset($teacher) ? 'Edit Teacher' : 'Add New Teacher' }}
             </h1>
             <p style="color: #6b7280;">
-                {{ isset($student) ? 'Update student information' : 'Fill in the details to add a new student' }}
+                {{ isset($teacher) ? 'Update teacher information' : 'Fill in the details to add a new teacher' }}
             </p>
         </div>
     </div>
@@ -250,12 +194,12 @@
     </div>
     @endif
 
-    <!-- Student Form -->
+    <!-- Teacher Form -->
     <div class="card">
-        <form action="{{ isset($student) ? route('account.students.update', $student->id) : route('account.students.store') }}"
-            method="POST" enctype="multipart/form-data">
+        <form action="{{ isset($teacher) ? route('account.teachers.update', $teacher->id) : route('account.teachers.store') }}"
+            method="POST">
             @csrf
-            @if(isset($student))
+            @if(isset($teacher))
             @method('PUT')
             @endif
 
@@ -268,84 +212,38 @@
                     <div class="form-group">
                         <label class="form-label" for="name">Full Name <span class="required">*</span></label>
                         <input type="text" id="name" name="name" class="form-input"
-                            value="{{ old('name', isset($student) ? $student->user->name : '') }}"
-                            placeholder="Enter student's full name" required>
-                        <div class="form-help">Enter the complete name of the student</div>
+                            value="{{ old('name', isset($teacher) ? $teacher->user->name : '') }}"
+                            placeholder="Enter teacher's full name" required>
+                        <div class="form-help">Enter the complete name of the teacher</div>
                     </div>
 
                     <!-- Username -->
                     <div class="form-group">
-                        <label class="form-label" for="username">Username</label>
+                        <label class="form-label" for="username">Username <span class="required">*</span></label>
                         <input type="text" id="username" name="username" class="form-input"
-                            value="{{ old('username', isset($student) ? $student->user->username : '') }}"
-                            placeholder="Enter unique username">
-                        <div class="form-help">Unique username for student login</div>
+                            value="{{ old('username', isset($teacher) ? $teacher->user->username : '') }}"
+                            placeholder="Enter unique username" required>
+                        <div class="form-help">Unique username for teacher login</div>
                     </div>
 
                     <!-- Email -->
                     <div class="form-group">
-                        <label class="form-label" for="email">Email Address</label>
+                        <label class="form-label" for="email">Email Address <span class="required">*</span></label>
                         <input type="email" id="email" name="email" class="form-input"
-                            value="{{ old('email', isset($student) ? $student->user->email : '') }}"
-                            placeholder="student@example.com">
-                        <div class="form-help">Student's email address for communication</div>
+                            value="{{ old('email', isset($teacher) ? $teacher->user->email : '') }}"
+                            placeholder="teacher@example.com" required>
+                        <div class="form-help">Teacher's email address for communication</div>
                     </div>
 
                     <!-- Phone Number -->
                     <div class="form-group">
                         <label class="form-label" for="phone">Phone Number</label>
                         <input type="tel" id="phone" name="phone" class="form-input"
-                            value="{{ old('phone', isset($student) ? $student->user->phone : '') }}"
+                            value="{{ old('phone', isset($teacher) ? $teacher->user->phone : '') }}"
                             placeholder="+964 XXX XXX XXXX">
-                        <div class="form-help">Student's contact number</div>
-                    </div>
-
-
-
-                    <!-- Student Photo -->
-                    <div class="form-group">
-                        <label class="form-label" for="photo">Student Photo</label>
-                        <input type="file" id="photo" name="photo" class="form-file"
-                            accept="image/jpg, image/jpeg, image/png" onchange="previewPhoto(this)">
-                        <div class="form-help">Upload student's photo (JPG, PNG, max 2MB)</div>
-                        <img id="photoPreview" class="photo-preview" src="#" alt="Photo preview">
-                        @if(isset($student) && $student->photo)
-                        <div style="margin-top: 8px;">
-                            <img src="{{ asset('storage/' . $student->photo) }}"
-                                style="max-width: 100px; border-radius: 8px;" alt="Current photo">
-                            <div class="form-help">Current photo</div>
-                        </div>
-                        @endif
+                        <div class="form-help">Teacher's contact number</div>
                     </div>
                 </div>
-            </div>
-
-            <!-- Academic Information Section -->
-            <div class="form-section">
-                <h3 class="form-section-title">Academic Information</h3>
-
-                <div class="form-grid">
-                    <!-- Class -->
-                    <div class="form-group">
-                        <label class="form-label" for="class_id">Class <span class="required">*</span></label>
-                        <select id="class_id" name="class_id" class="form-select" required>
-                            <option value="">Select a class</option>
-                            @foreach($classes as $class)
-                            <option value="{{ $class->id }}"
-                                {{ old('class_id', isset($student) ? $student->class_id : '') == $class->id ? 'selected' : '' }}>
-                                {{ $class->name }} - {{ $class->stage->name ?? 'No Stage' }}
-                            </option>
-                            @endforeach
-                        </select>
-                        <div class="form-help">Select the class for this student</div>
-                    </div>
-
-
-                </div>
-
-
-
-
             </div>
 
             <!-- Account Information Section -->
@@ -357,9 +255,9 @@
                     <div class="form-group">
                         <label class="form-label" for="password">Password <span class="required">*</span></label>
                         <input type="password" id="password" name="password" class="form-input"
-                            placeholder="Enter password" {{ !isset($student) ? 'required' : '' }}>
+                            placeholder="Enter password" {{ !isset($teacher) ? 'required' : '' }}>
                         <div class="form-help">
-                            {{ isset($student) ? 'Leave blank to keep current password' : 'Strong password for student account' }}
+                            {{ isset($teacher) ? 'Leave blank to keep current password' : 'Strong password for teacher account' }}
                         </div>
                     </div>
 
@@ -367,28 +265,17 @@
                     <div class="form-group">
                         <label class="form-label" for="password_confirmation">Confirm Password <span class="required">*</span></label>
                         <input type="password" id="password_confirmation" name="password_confirmation" class="form-input"
-                            placeholder="Confirm password" {{ !isset($student) ? 'required' : '' }}>
+                            placeholder="Confirm password" {{ !isset($teacher) ? 'required' : '' }}>
                         <div class="form-help">Re-enter the password to confirm</div>
-                    </div>
-                    <!-- Status -->
-                    <div class="form-group">
-                        <label class="form-label" for="status">Status <span class="required">*</span></label>
-                        <select id="status" name="status" class="form-select" required>
-                            <option value="">Select status</option>
-                            <option value="0" {{ old('status', isset($student) ? $student->status : '') == 0 ? 'selected' : '' }}>Active</option>
-                            <option value="1" {{ old('status', isset($student) ? $student->status : '') == 1 ? 'selected' : '' }}>Transferred</option>
-                            <option value="2" {{ old('status', isset($student) ? $student->status : '') == 2 ? 'selected' : '' }}>Suspended</option>
-                        </select>
-                        <div class="form-help">Select the status for this student</div>
                     </div>
                 </div>
             </div>
 
             <!-- Form Actions -->
             <div class="form-actions">
-                <a href="{{ route('account.students') }}" class="btn btn-secondary">Cancel</a>
-                <button type="submit" class="btn {{ isset($student) ? 'btn-primary' : 'btn-success' }}">
-                    {{ isset($student) ? 'Update Student' : 'Add Student' }}
+                <a href="{{ route('account.teachers') }}" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn {{ isset($teacher) ? 'btn-primary' : 'btn-success' }}">
+                    {{ isset($teacher) ? 'Update Teacher' : 'Add Teacher' }}
                 </button>
             </div>
         </form>
@@ -396,24 +283,6 @@
 </div>
 
 <script>
-    // Photo preview function
-    function previewPhoto(input) {
-        const preview = document.getElementById('photoPreview');
-
-        if (input.files && input.files[0]) {
-            const reader = new FileReader();
-
-            reader.onload = function(e) {
-                preview.src = e.target.result;
-                preview.style.display = 'block';
-            }
-
-            reader.readAsDataURL(input.files[0]);
-        } else {
-            preview.style.display = 'none';
-        }
-    }
-
     // Form validation
     document.addEventListener('DOMContentLoaded', function() {
         const form = document.querySelector('form');
@@ -440,13 +309,13 @@
         }
 
         // Phone number formatting
-        const phoneFields = document.querySelectorAll('input[type="tel"]');
-        phoneFields.forEach(field => {
-            field.addEventListener('input', function() {
+        const phoneField = document.getElementById('phone');
+        if (phoneField) {
+            phoneField.addEventListener('input', function() {
                 // Remove non-numeric characters except + and spaces
                 this.value = this.value.replace(/[^\d\+\s]/g, '');
             });
-        });
+        }
     });
 </script>
 @endsection

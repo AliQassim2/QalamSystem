@@ -284,7 +284,7 @@
                     <th>Student Name</th>
                     <th>Class</th>
                     <th>Username</th>
-
+                    <th>Status</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -301,6 +301,31 @@
                         </span>
                     </td>
                     <td>{{ $student->user->username ?? '-' }}</td>
+                    <td>
+                        @switch($student->status)
+                        @case(0)
+                        <span class="badge rounded-pill px-3 py-2" style="background:#22c55e; color:white; font-weight:600;">
+                            Active
+                        </span>
+                        @break
+
+                        @case(1)
+                        <span class="badge rounded-pill px-3 py-2" style="background:#6b7280; color:white; font-weight:600;">
+                            Transferred
+                        </span>
+                        @break
+
+                        @case(2)
+                        <span class="badge rounded-pill px-3 py-2" style="background:#ef4444; color:white; font-weight:600;">
+                            Suspended
+                        </span>
+                        @break
+
+                        @default
+                        <span class="badge rounded-pill px-3 py-2" style="background:#f59e0b; color:white; font-weight:600;">
+                            Unknown
+                        </span>
+                        @endswitch
 
                     <td>
                         <div style="display: flex; gap: 4px;">

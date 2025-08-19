@@ -15,8 +15,8 @@
 
         <!-- Left side -->
         <nav class="flex items-center space-x-6">
-            <a href="{{ route('StructureManager.home') }}" class="text-gray-700 hover:text-blue-500 font-medium">Home</a>
-            <a href="{{ route('StructureManager.Stages') }}"
+            <a href="{{ route('account.home') }}" class="text-gray-700 hover:text-blue-500 font-medium">Home</a>
+            <a href="{{ route('account.students') }}"
                 class="text-gray-700 hover:text-blue-500 font-medium">Student</a>
             <a href="{{ route('StructureManager.Classes') }}"
                 class="text-gray-700 hover:text-blue-500 font-medium">Teacher</a>

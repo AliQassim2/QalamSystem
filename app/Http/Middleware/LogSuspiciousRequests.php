@@ -27,14 +27,15 @@ class LogSuspiciousRequests
         ];
 
         // foreach ($suspicious as $pattern) {}
-        //if (str_contains($request->path(), $pattern)) {        }
-        Log::channel('suspicious')->warning('request info', [
-            'real_ip'    => $ip,
-            'cf_ip'      => $request->ip(), // Cloudflare proxy IP
-            'path'       => $request->path(),
-            'full_url'   => $request->fullUrl(),
-            'user_agent' => $request->header('User-Agent'),
-        ]);
+        if ($ip != '127.0.0.1') {
+            Log::channel('suspicious')->warning('request info', [
+                'real_ip'    => $ip,
+                'cf_ip'      => $request->ip(), // Cloudflare proxy IP
+                'path'       => $request->path(),
+                'full_url'   => $request->fullUrl(),
+                'user_agent' => $request->header('User-Agent'),
+            ]);
+        }
 
 
 

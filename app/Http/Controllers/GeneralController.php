@@ -33,10 +33,10 @@ class GeneralController extends Controller
 
         $studentCount = $school->students()->count();
         $teacherCount = $school->teachers()->count();
-        $SchoolManagerCount = $school->SchoolManager()->count();
-        $UserAdministratorCount = $school->UserAdministrator()->where('id', '!=', Auth::user()->userAdministrator->id)->count();
-        $StructureManagerCount = $school->StructureManager()->count();
+        // $SchoolManagerCount = $school->SchoolManager()->count();
+        // $UserAdministratorCount = $school->UserAdministrator()->where('id', '!=', Auth::user()->userAdministrator->id)->count();
+        // $StructureManagerCount = $school->StructureManager()->count();
 
-        return view('user_administrator.index', compact('studentCount', 'teacherCount', 'SchoolManagerCount', 'UserAdministratorCount', 'StructureManagerCount'));
+        return view('user_administrator.index', compact('studentCount', 'teacherCount'));
     }
 }

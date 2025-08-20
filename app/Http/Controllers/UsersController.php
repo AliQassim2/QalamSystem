@@ -17,8 +17,7 @@ class UsersController extends Controller
             'schoolManager.school',
             'userAdministrator.school',
             'structureManager.school'
-        ])
-            ->paginate(15);
+        ])->paginate(15);
 
         // Role statistics
         $roleStats = [];

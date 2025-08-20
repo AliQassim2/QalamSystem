@@ -69,6 +69,8 @@ class LoginController extends Controller
                 return redirect()->route('account.home');
             case 3:
                 return redirect()->route('StructureManager.home'); // Redirect to school structure
+            case 4:
+                return redirect()->route('Teacher');
         }
 
 

@@ -24,7 +24,30 @@ class StudentController extends Controller
     {
         return view('user_administrator.students.show', compact('student'));
     }
+    public function search(Request $request, $searchValue)
+    {
+        $students = Auth::user()->userAdministrator->school->students;
+        // Filter students by name or username
+        $filtered = $students->filter(function ($student) use ($searchValue) {
+            $searchValue = strtolower($searchValue); // case-insensitive
+            return str_contains(strtolower($student->user->name), $searchValue)
+                || str_contains(strtolower($student->user->username), $searchValue);
+        });
+        $data = $filtered->map(function ($student) {
+            return [
+                "StudentName" => $student->user->name,
+                "Username"    => $student->user->username,
+                "Stage"       => $student->classes->stage->name,
+                "Class"       => $student->classes->name,
+                "Status"      => $student->status
+            ];
+        })->toArray();
 
+        return [
+
+            'Data' => $data,
+        ];
+    }
     public function create()
     {
         $school = Auth::user()->userAdministrator->school;

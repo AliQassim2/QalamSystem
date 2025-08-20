@@ -30,4 +30,7 @@ Route::middleware(\App\Http\Middleware\CustomAuth::class)->group(function () {
     require_once 'Student.php';
     require_once 'Teacher.php';
     Route::get('{stage}', [\App\Http\Controllers\GeneralController::class, 'getStageData'])->name('account.teachers.links.data');
+    Route::get('/teacher/stage/{stage}/subjects', [\App\Http\Controllers\TeacherController::class, 'getSubjects']);
+    Route::get('/teacher/subject/{subject}/classes', [\App\Http\Controllers\TeacherController::class, 'getClasses']);
+    Route::get('/teacher/class/{class}/students', [\App\Http\Controllers\TeacherController::class, 'getStudents']);
 });

@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Link;
 use App\Models\Teacher;
 use App\Models\User;
+use App\Models\Stage;
+use App\Models\Subject;
+use App\Models\SchoolClass;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\QueryException;
@@ -144,5 +147,19 @@ class TeacherController extends Controller
             ->where('subject_id', $request->input('subject_id'))
             ->delete();
         return redirect()->route('account.teachers.links', $teacher)->with('success', 'Link deleted successfully.');
+    }
+    public function getSubjects(Stage $stage)
+    {
+        return $stage->subjects()->select('id', 'name')->get();
+    }
+
+    public function getClasses(Subject $subject)
+    {
+        return $subject->classes()->select('id', 'name')->get();
+    }
+
+    public function getStudents(SchoolClass $class)
+    {
+        return $class->students()->with('user:id,name,username')->get();
     }
 }

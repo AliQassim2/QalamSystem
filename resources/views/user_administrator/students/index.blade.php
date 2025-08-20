@@ -455,39 +455,32 @@
         }
 
         // Search functionality
+
         document.getElementById('searchInput').addEventListener('input', function() {
-            const searchTerm = this.value.toLowerCase().trim();
-            const rows = document.querySelectorAll('#studentsTable tbody tr');
-
-            rows.forEach(row => {
-                const studentName = row.cells[1].textContent.toLowerCase();
-                const username = row.cells[4].textContent.toLowerCase();
-
-                if (studentName.includes(searchTerm) || username.includes(searchTerm)) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-        });
-        document.getElementById('stageFilter').addEventListener('change', function() {
-            const stageId = this.value;
-
-            if (!stageId) {
-                document.getElementById('classFilter').innerHTML = '<option value="">Select a class</option>';
+            const searchValue = this.value;
+            if (!searchValue) {
                 return;
             }
 
-            fetch(`/${stageId}`)
-                .then(response => response.json())
-                .then(data => {
-                    // Populate classes
-                    let classOptions = '<option value="">Select a class</option>';
-                    data.classes.forEach(cls => {
-                        classOptions += `<option value="${cls.id}">${cls.name}</option>`;
-                    });
-                    document.getElementById('classFilter').innerHTML = classOptions;
 
+            fetch(`/AccountManager/students/${searchValue}/search`)
+                .then(response => {
+                    // First, check if the response is OK (status 200-299)
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    // Parse the response as JSON (or text if your endpoint returns plain text)
+                    return response.json();
+                })
+                .then(data => {
+                    // Handle the data received from Laravel
+                    data.Data.forEach(row => console.log(row.StudentName));
+                    // For example, you can update your HTML
+                    // document.getElementById('studentsList').innerHTML = renderStudents(data);
+                })
+                .catch(error => {
+                    // Handle errors
+                    console.error('Fetch error:', error);
                 });
         });
         // stage filter functionality

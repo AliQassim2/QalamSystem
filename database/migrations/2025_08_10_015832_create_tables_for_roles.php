@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('school_manager', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('school_id')->constrained('schools')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('restrict');
+            $table->foreignId('school_id')->constrained('schools')->onDelete('restrict');
             $table->date('created_at')->nullable();
             $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('restrict');
             $table->date('deleted_at')->nullable();
@@ -22,8 +22,8 @@ return new class extends Migration
         });
         Schema::create('user_administrator', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('school_id')->constrained('schools')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('restrict');
+            $table->foreignId('school_id')->constrained('schools')->onDelete('restrict');
             $table->date('created_at')->nullable();
             $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('restrict');
             $table->date('deleted_at')->nullable();
@@ -31,8 +31,8 @@ return new class extends Migration
         });
         Schema::create('structure_manager', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('school_id')->constrained('schools')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('restrict');
+            $table->foreignId('school_id')->constrained('schools')->onDelete('restrict');
             $table->date('created_at')->nullable();
             $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('restrict');
             $table->date('deleted_at')->nullable();

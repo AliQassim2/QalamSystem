@@ -29,7 +29,8 @@ class StudentController extends Controller
     {
         $school = Auth::user()->userAdministrator->school;
         $classes = $school->classes;
-        return view('user_administrator.students.form', compact('classes'));
+        $stages = $school->stages;
+        return view('user_administrator.students.form', compact('classes', 'stages'));
     }
 
     public function store(Request $request)
@@ -38,7 +39,7 @@ class StudentController extends Controller
             'name' => 'required|string|max:255',
             'username' => 'required|string|max:255|unique:users',
             'email' => 'required|string|email|max:255|unique:users',
-            'phone' => 'required|string|max:15',
+            'phone' => 'nullable|string|max:15',
             'password' => 'required|string|min:8|confirmed',
         ]);
         $validatedDataStudent = $request->validate([
@@ -62,8 +63,11 @@ class StudentController extends Controller
 
     public function edit(Student $student)
     {
-        $classes = Auth::user()->userAdministrator->school->classes;
-        return view('user_administrator.students.form', compact('student', 'classes'));
+        $school = Auth::user()->userAdministrator->school;
+        $classes = $school->classes;
+        $stages = $school->stages;
+
+        return view('user_administrator.students.form', compact('student', 'classes', 'stages'));
     }
 
     public function update(Request $request, Student $student)
@@ -72,13 +76,15 @@ class StudentController extends Controller
             'name' => 'required|string|max:255',
             'username' => 'required|string|max:255|unique:users,username,' . $student->user_id,
             'email' => 'required|string|email|max:255|unique:users,email,' . $student->user_id,
-            'phone' => 'required|string|max:15',
+            'phone' => 'nullable|string|max:15',
             'password' => 'nullable|string|min:8|confirmed',
         ]);
 
         $validatedDataStudent = $request->validate([
             'class_id' => 'required|exists:classes,id',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'status' => 'required|in:0,1,2',
+
         ]);
 
         // Handle optional fields elegantly

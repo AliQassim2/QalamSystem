@@ -15,8 +15,9 @@ class StudentController extends Controller
     {
         $school = Auth::user()->userAdministrator->school;
         $students = $school->students;
+        $stages = $school->stages;
         $classes = $school->classes;
-        return view('user_administrator.students.index', compact('students', 'classes'));
+        return view('user_administrator.students.index', compact('students', 'classes', 'stages'));
     }
 
     public function show(Student $student)

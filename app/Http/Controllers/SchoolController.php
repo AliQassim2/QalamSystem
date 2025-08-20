@@ -91,6 +91,7 @@ class SchoolController extends Controller
             // Save to storage/app/public/school_logos
             $path = $request->file('logo')->store('school_logos', 'public');
             $validated['logo_path'] = 'storage/' . $path; // Accessible from public
+            unset($validated['logo']);
         }
 
         // Update the school

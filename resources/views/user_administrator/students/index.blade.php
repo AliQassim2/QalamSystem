@@ -268,6 +268,12 @@
         <!-- Search and Filter Bar -->
         <div class="search-bar">
             <input type="text" id="searchInput" class="form-input" placeholder="Search students..." style="flex: 2;">
+            <select id="stageFilter" class="form-input">
+                <option value="">All Stages</option>
+                @foreach($stages as $stage)
+                <option value="{{ $stage->name }}">{{ $stage->name }}</option>
+                @endforeach
+            </select>
             <select id="classFilter" class="form-input">
                 <option value="">All Classes</option>
                 @foreach($classes as $class)
@@ -282,6 +288,7 @@
                 <tr>
                     <th>#</th>
                     <th>Student Name</th>
+                    <th>Stage</th>
                     <th>Class</th>
                     <th>Username</th>
                     <th>Status</th>
@@ -294,6 +301,11 @@
                     <td>{{ $loop->iteration }}</td>
                     <td>
                         <strong>{{ $student->user->name }}</strong>
+                    </td>
+                    <td>
+                        <span class="badge badge-info">
+                            {{ $student->classes->stage->name ?? 'No stage' }}
+                        </span>
                     </td>
                     <td>
                         <span class="badge badge-info">
@@ -441,15 +453,14 @@
 
     // Search functionality
     document.getElementById('searchInput').addEventListener('input', function() {
-        const searchTerm = this.value.toLowerCase();
+        const searchTerm = this.value.toLowerCase().trim();
         const rows = document.querySelectorAll('#studentsTable tbody tr');
 
         rows.forEach(row => {
             const studentName = row.cells[1].textContent.toLowerCase();
-            const email = row.cells[3].textContent.toLowerCase();
             const username = row.cells[4].textContent.toLowerCase();
 
-            if (studentName.includes(searchTerm) || email.includes(searchTerm) || username.includes(searchTerm)) {
+            if (studentName.includes(searchTerm) || username.includes(searchTerm)) {
                 row.style.display = '';
             } else {
                 row.style.display = 'none';

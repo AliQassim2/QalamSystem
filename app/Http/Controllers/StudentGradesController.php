@@ -30,10 +30,42 @@ class StudentGradesController extends Controller
                 ->get();
 
             // Get all grades for this student
-            $grades = Grade::with(['subject'])
-                ->where('student_id', $student->id)
-                ->get();
+            $grades = Auth::user()->student->grades;
 
+            $gradeRatio = [
+                "A" => 90,
+                "B" => 80,
+                "C" => 70,
+                "D" => 60,
+                "E" => 50,
+                "F" => 0,
+            ];
+
+            // Default grade
+            $letterGrade = 'غير متوفر';
+            $ratios = 0;
+            // Helper: get score by type
+            $getScore = fn(int $type) => optional($grades->firstWhere('type', $type))->score ?? 0;
+
+            // Calculate averages
+            $firstMid   = ($getScore(0) + $getScore(1)) / 2;
+            $midFinal   = $getScore(2);
+            $secondMid  = ($getScore(3) + $getScore(4)) / 2;
+            $finalExam  = $getScore(5);
+
+            // Final result
+            $finalResult = ($firstMid + $midFinal + $secondMid + $finalExam) / 4;
+            $ratios = $finalResult;
+            // Ensure all 6 grades exist with a score
+            if ($grades->whereNotNull('score')->count() === 6) {
+                // Determine grade letter
+                foreach ($gradeRatio as $letter => $minScore) {
+                    if ($finalResult >= $minScore) {
+                        $letterGrade = $letter;
+                        break;
+                    }
+                }
+            }
             // Calculate additional statistics
             $statistics = $this->calculateStatistics($student, $subjects, $grades);
 
@@ -41,7 +73,9 @@ class StudentGradesController extends Controller
                 'student',
                 'subjects',
                 'grades',
-                'statistics'
+                'statistics',
+                'ratios',
+                'letterGrade'
             ));
         } catch (\Exception $e) {
             dd($e->getMessage());

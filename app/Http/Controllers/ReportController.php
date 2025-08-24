@@ -65,22 +65,30 @@ class ReportController extends Controller
     public function getStudentsMissingGrades()
     {
         $query = "
-                SELECT u.id, u.name, c.name as 'className', s.name as 'stageName'
-                FROM users as u
-                JOIN students as st ON u.id = st.user_id
-                JOIN classes as c ON st.class_id = c.id
-                JOIN stages as s ON c.stage_id = s.id
-                WHERE s.school_id = ? AND u.role=5 LIMIT 3";
+    SELECT DISTINCT st.id, u.name, c.name as className, s.name as stageName
+    FROM users as u
+    JOIN students as st ON u.id = st.user_id
+    JOIN classes as c ON st.class_id = c.id
+    JOIN stages as s ON c.stage_id = s.id
+    JOIN grades as g ON g.student_id = st.id
+    WHERE s.school_id = ?
+      AND u.role = 5
+      AND g.score IS NULL
+    LIMIT 3
+";
+
         $getStudents = DB::select($query, [Auth::user()->schoolManager->school_id]);
+
         foreach ($getStudents as $student) {
             $query = "
                 SELECT DISTINCT sub.name as 'subjectName'
                 FROM grades as g
                 JOIN subjects as sub ON g.subject_id = sub.id
-                WHERE g.student_id = ? AND g.score IS NULL
+                WHERE g.student_id = ?
             ";
             $student->missingSubjects = DB::select($query, [$student->id]);
         }
+
         $count = DB::select('SELECT COUNT(*) as count
                 FROM users as u
                 JOIN students as st ON u.id = st.user_id

@@ -518,9 +518,22 @@
                     @php
                         $subjectGrades = $grades->where('subject_id', $subject->id);
                         $completedGrades = $subjectGrades->whereNotNull('score');
+
                         $totalScore = $completedGrades->sum('score');
                         $completedCount = $completedGrades->count();
-                        $finalGrade = $completedCount > 0 ? round($totalScore / $completedCount, 1) : 0;
+
+                        $finalGrade =
+                            $completedCount > 0
+                                ? (($subjectGrades->where('type', 0)->value('score') +
+                                        $subjectGrades->where('type', 1)->value('score')) /
+                                        2 +
+                                        $subjectGrades->where('type', 2)->value('score') +
+                                        ($subjectGrades->where('type', 3)->value('score') +
+                                            $subjectGrades->where('type', 4)->value('score')) /
+                                            2 +
+                                        $subjectGrades->where('type', 5)->value('score')) /
+                                    4
+                                : 0;
 
                         // Calculate letter grade
                         $letterGrade = 'غير مكتمل';
@@ -539,6 +552,9 @@
                                 $gradeClass = 'grade-C';
                             } elseif ($finalGrade >= 60) {
                                 $letterGrade = 'D';
+                                $gradeClass = 'grade-D';
+                            } elseif ($finalGrade >= 50) {
+                                $letterGrade = 'E';
                                 $gradeClass = 'grade-D';
                             } else {
                                 $letterGrade = 'F';
@@ -568,7 +584,7 @@
                             <div class="grade-item">
                                 <div class="grade-label">المعدل الحالي</div>
                                 <div
-                                    class="grade-value {{ $finalGrade >= 70 ? 'grade-completed' : ($finalGrade >= 60 ? 'grade-pending' : 'grade-missing') }}">
+                                    class="grade-value {{ $finalGrade >= 70 ? 'grade-completed' : ($finalGrade >= 50 ? 'grade-pending' : 'grade-missing') }}">
                                     {{ $finalGrade }}/100
                                 </div>
                             </div>
@@ -622,7 +638,7 @@
                     </div>
                     <div class="stat-card">
                         <span class="stat-number" style="color: #9C27B0;">
-                            {{ $grades->whereNotNull('score')->count() > 0 ? round($grades->whereNotNull('score')->avg('score'), 1) : 0 }}%
+                            {{ $grades->whereNotNull('score')->count() > 0 ? round($grades->whereNotNull('score')->avg('score'), 2) : 0 }}%
                         </span>
                         <span class="stat-label">المعدل العام</span>
                     </div>
@@ -688,7 +704,7 @@
                 content += `
                     <div class="detailed-grade-card">
                         <div class="exam-type">${gradeTypes[i]}</div>
-                        <div class="exam-score ${hasScore ? (grade.score >= 70 ? 'grade-completed' : (grade.score >= 60 ? 'grade-pending' : 'grade-missing')) : 'grade-missing'}">
+                        <div class="exam-score ${hasScore ? (grade.score >= 70 ? 'grade-completed' : (grade.score >= 50 ? 'grade-pending' : 'grade-missing')) : 'grade-missing'}">
                             ${hasScore ? `${grade.score}/100` : 'لم يتم بعد'}
                         </div>
                         ${hasScore && grade.date ? `<div style="font-size: 0.8em; color: #6c757d; margin-top: 5px;">${grade.date}</div>` : ''}

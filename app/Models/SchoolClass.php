@@ -32,4 +32,8 @@ class SchoolClass extends Model
     {
         return $this->hasMany(Link::class, 'class_id');
     }
+    public function subjects()
+    {
+        return $this->hasManyThrough(Subject::class, Link::class, 'class_id', 'id', 'id', 'subject_id');
+    }
 }

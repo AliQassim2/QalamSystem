@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\StructureManager;
 use App\Models\SchoolClass;
 use Illuminate\Database\QueryException;
+use Illuminate\Http\JsonResponse;
 
 class ClassController extends Controller
 {
@@ -50,6 +51,30 @@ class ClassController extends Controller
                 return redirect()->route('StructureManager.Stages')
                     ->with('error', 'Cannot delete this class because it is linked to other records.');
             }
+        }
+    }
+    public function getClasses(Request $request): JsonResponse
+    {
+        try {
+            $request->validate([
+                'subject_id' => 'required|exists:subjects,id'
+            ]);
+            $classes = Auth::user()->teacher->links->where('subject_id', $request->subject_id)->map(function ($link) {
+                return [
+                    "id" => $link->classes->id,
+                    "name" => $link->classes->name
+                ];
+            })->values();
+            return response()->json([
+                'success' => true,
+                'classes' => $classes
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'حدث خطأ في تحميل الصفوف',
+                'error' => $e->getMessage()
+            ], 500);
         }
     }
 }

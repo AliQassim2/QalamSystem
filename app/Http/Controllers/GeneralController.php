@@ -48,4 +48,22 @@ class GeneralController extends Controller
             'subjects' => $stage->subjects()->select('id', 'name')->get(),
         ]);
     }
+
+
+    public function managerDashboard()
+    {
+        $school = Auth::user()->schoolManager->school;
+        $student = $school->students()->count();
+        $teacher = $school->teachers()->count();
+        $class = $school->classes()->count();
+        $stage = $school->stages()->count();
+        $subject = $school->subjects()->count();
+
+        return view('manager.index', compact('student', 'teacher', 'class', 'stage', 'subject'));
+    }
+
+    public function reportView()
+    {
+        return view('manager.report');
+    }
 }

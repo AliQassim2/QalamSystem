@@ -11,10 +11,13 @@ class SubjectController extends Controller
 {
     public function index()
     {
-        $subjects = Auth::user()->structureManager->school->subjects;
-        $stages = Auth::user()->structureManager->school->stages;
+        if (Auth::user()->structureManager) {
+            $subjects = Auth::user()->structureManager->school->subjects;
+            $stages = Auth::user()->structureManager->school->stages;
 
-        return view('school_structure.subjects', compact('subjects', 'stages'));
+            return view('school_structure.subjects', compact('subjects', 'stages'));
+        }
+        abort(403);
     }
     public function store(Request $request)
     {
@@ -44,6 +47,26 @@ class SubjectController extends Controller
                 return redirect()->route('StructureManager.Stages')
                     ->with('error', 'Cannot delete this Subject because it is linked to other records.');
             }
+        }
+    }
+    public function getSubjects(Request $request)
+    {
+        try {
+            $validated = $request->validate([
+                'stage_id' => 'required|exists:stages,id'
+            ]);
+            $subjects = Auth::user()->teacher->subjects()->where('stage_id', $validated['stage_id'])->get();
+
+            return response()->json([
+                'success' => true,
+                'subjects' => $subjects
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'حدث خطأ في تحميل المواد',
+                'error' => $e->getMessage()
+            ], 500);
         }
     }
 }

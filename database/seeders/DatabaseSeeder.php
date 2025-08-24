@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Grade;
+use App\Models\Link;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -151,9 +153,9 @@ class DatabaseSeeder extends Seeder
         // === Teachers ===
         $teacherUser = User::create([
             'name' => 'Teacher Fatima',
-            'username' => 'teacher_fatima',
+            'username' => 't',
             'email' => 'teacher@example.com',
-            'password' => Hash::make('password'),
+            'password' => 1,
             'role' => 4,
             'created_by' => $userAdminstore->id
         ]);
@@ -166,18 +168,64 @@ class DatabaseSeeder extends Seeder
         for ($i = 1; $i <= 5; $i++) {
             $studentUser = User::create([
                 'name' => "Student $i",
-                'username' => "student$i sadfsd",
+                'username' => "s$i",
                 'email' => "student$i@example.com",
-                'password' => Hash::make('password'),
+                'password' => 1,
                 'role' => 5,
                 'created_by' => $userAdminstore->id
 
             ]);
-            Student::create([
+            $Student = Student::create([
                 'user_id' => $studentUser->id,
                 'class_id' => $class1->id,
                 'status' => $i % 2 == 0 ? 0 : 1, // active / transferred
             ]);
+            Grade::create([
+                'student_id' => $Student->id,
+                'subject_id' => $math->id,
+                'score' => rand(0, 100),
+                'type' => 0,
+                'created_by' => $teacher->id
+            ]);
+            Grade::create([
+                'student_id' => $Student->id,
+                'subject_id' => $math->id,
+                'score' => rand(0, 100),
+                'type' => 1,
+                'created_by' => $teacher->id
+            ]);
+            Grade::create([
+                'student_id' => $Student->id,
+                'subject_id' => $math->id,
+                'score' => rand(0, 100),
+                'type' => 2,
+                'created_by' => $teacher->id
+            ]);
+            Grade::create([
+                'student_id' => $Student->id,
+                'subject_id' => $math->id,
+                'score' => rand(0, 100),
+                'type' => 3,
+                'created_by' => $teacher->id
+            ]);
+            Grade::create([
+                'student_id' => $Student->id,
+                'subject_id' => $math->id,
+                'score' => rand(0, 100),
+                'type' => 4,
+                'created_by' => $teacher->id
+            ]);
+            Grade::create([
+                'student_id' => $Student->id,
+                'subject_id' => $math->id,
+                'type' => 5,
+                'created_by' => $teacher->id
+            ]);
         }
+        Link::create([
+            'subject_id' => $math->id,
+            'class_id' => $class1->id,
+            'teacher_id' => $teacher->id
+        ]);
     }
 }

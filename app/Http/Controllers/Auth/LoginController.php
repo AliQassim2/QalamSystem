@@ -65,16 +65,19 @@ class LoginController extends Controller
         switch ($user->role) {
             case 0:
                 return redirect()->route('Dashboard.home'); // Redirect to admin Dashboard
+            case 1:
+                return redirect()->route('manager.index'); // Redirect to manager Dashboard
             case 2:
                 return redirect()->route('account.home');
             case 3:
                 return redirect()->route('StructureManager.home'); // Redirect to school structure
             case 4:
-                return redirect()->route('Teacher');
+                return redirect()->route('teacher'); // Redirect to teacher Dashboard
+            case 5:
+                return redirect()->route('students'); // Redirect to student Dashboard
+            default:
+                return redirect()->route('login')->with('error', 'Unauthorized access.');
         }
-
-
-        return view('welcome');
     }
 
     public function logout(Request $request)

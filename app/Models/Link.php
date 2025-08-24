@@ -16,7 +16,7 @@ class Link extends Model
         'subject_id'
     ];
 
-    public function class()
+    public function classes()
     {
         return $this->belongsTo(SchoolClass::class, 'class_id');
     }

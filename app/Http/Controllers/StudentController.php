@@ -2,22 +2,32 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Grade;
+use App\Models\SchoolClass;
 use Illuminate\Http\Request;
 use App\Models\Student;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\QueryException;
+use Illuminate\Http\JsonResponse;
 
 class StudentController extends Controller
 {
     // Define methods for handling student-related actions
     public function index()
     {
-        $school = Auth::user()->userAdministrator->school;
+        if (isset(Auth::user()->userAdministrator->school)) {
+            $school = Auth::user()->userAdministrator->school;
+            $viewName = 'user_administrator.students.index';
+        } else {
+            $school = Auth::user()->teacher->school;
+            $viewName = 'teachers.index';
+        }
         $students = $school->students;
         $stages = $school->stages;
         $classes = $school->classes;
-        return view('user_administrator.students.index', compact('students', 'classes', 'stages'));
+        $subjects = $school->subjects;
+        return view($viewName, compact('students', 'classes', 'stages', 'subjects'));
     }
 
     public function show(Student $student)
@@ -78,7 +88,7 @@ class StudentController extends Controller
         $validatedDataUser['role'] = 5;
         $user = User::create($validatedDataUser);
         $validatedDataStudent['user_id'] = $user->id;
-        Student::create($validatedDataStudent);
+        $student = Student::create($validatedDataStudent);
 
         return redirect()->route('account.students')
             ->with('success', 'Student added successfully.');
@@ -141,6 +151,100 @@ class StudentController extends Controller
             }
             return redirect()->route('account.students')
                 ->with('error', 'Failed to delete student.');
+        }
+    }
+    public function getStudents(Request $request): JsonResponse
+    {
+        try {
+            $request->validate([
+                'class_id' => 'required|exists:classes,id',
+                'page' => 'nullable|integer|min:1',
+                'search' => 'nullable|string|max:100'
+            ]);
+
+            $perPage = 15; // Number of students per page
+            $search = $request->get('search', '');
+
+            // Build the query
+            $query = Student::where('class_id', $request->class_id)
+                ->where('status', 0)
+                ->join('users', 'students.user_id', '=', 'users.id')
+                ->select(
+                    'students.id',
+                    'students.created_at',
+                    'students.class_id',
+                    'users.name'
+                );
+
+
+            $totalWithoutSearch = (clone $query)->count();
+            // Apply search if provided
+            if (!empty($search)) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'LIKE', "%{$search}%");
+                });
+            }
+            // Get total count
+
+            // Get paginated results
+            $students = $query->orderBy('name')
+                ->paginate($perPage, ['*'], 'page', $request->get('page', 1));
+
+            // Format pagination info
+            $pagination = [
+                'current_page' => $students->currentPage(),
+                'last_page' => $students->lastPage(),
+                'per_page' => $students->perPage(),
+                'total' => $students->total(),
+                'from' => $students->firstItem(),
+                'to' => $students->lastItem()
+            ];
+
+            return response()->json([
+                'success' => true,
+                'students' => $students,
+                'pagination' => $pagination,
+                'total_without_search' => $totalWithoutSearch
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'حدث خطأ في تحميل الطلاب',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Get student details for grades management
+     */
+    public function getStudentDetails(Request $request): JsonResponse
+    {
+        try {
+            $request->validate([
+                'student_id' => 'required|exists:students,id'
+            ]);
+
+            $student = Student::with(['class', 'class.stage', 'grades'])
+                ->findOrFail($request->student_id);
+
+            return response()->json([
+                'success' => true,
+                'student' => [
+                    'id' => $student->id,
+                    'name' => $student->name,
+                    'student_number' => $student->student_number,
+                    'class_name' => $student->class->name,
+                    'stage_name' => $student->class->stage->name,
+                    'created_at' => $student->created_at->format('Y-m-d')
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'حدث خطأ في تحميل بيانات الطالب',
+                'error' => $e->getMessage()
+            ], 500);
         }
     }
 }

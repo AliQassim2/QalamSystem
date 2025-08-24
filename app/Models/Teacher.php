@@ -21,6 +21,10 @@ class Teacher extends Model
     {
         return $this->hasMany(Link::class);
     }
+    public function subjects()
+    {
+        return $this->hasManyThrough(Subject::class, Link::class, 'teacher_id', 'id', 'id', 'subject_id')->distinct();
+    }
     public function user()
     {
         return $this->belongsTo(User::class);

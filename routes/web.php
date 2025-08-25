@@ -9,15 +9,15 @@ Route::middleware(\App\Http\Middleware\CustomGuest::class)->group(function () {
     Route::get('/send-login-code', [\App\Http\Controllers\Auth\LoginController::class, 'sendLoginCode'])->name('send.login.code');
 });
 
+Route::middleware('auth:admin')->group(function () {
+    require_once 'Admin.php';
+});
 Route::middleware(\App\Http\Middleware\CustomAuth::class)->group(function () {
 
     Route::get('/logout', [\App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
     Route::get('/', function () {
         return view('welcome');
     })->name('home');
-    Route::middleware(\App\Http\Middleware\isAdmin::class)->group(function () {
-        require_once 'Admin.php';
-    });
     Route::middleware(\App\Http\Middleware\isSchoolManager::class)->group(function () {
         require_once 'School Manager.php';
     });

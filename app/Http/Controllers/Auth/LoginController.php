@@ -34,6 +34,9 @@ class LoginController extends Controller
             ->first();
 
         if (!$user) {
+            if (Auth::guard('admin')->attempt(['username' => $request->login, 'password' => $request->password])) {
+                return redirect()->route('Dashboard.home'); // Redirect to admin Dashboard
+            }
             return back()->withErrors(['login' => 'User not found']);
         }
 

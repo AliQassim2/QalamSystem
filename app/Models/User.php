@@ -6,12 +6,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Builder;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
-
+    protected static function booted()
+    {
+        static::addGlobalScope('exclude_state_1', function (Builder $builder) {
+            $builder->where('state', 1);
+        });
+    }
     /**
      * The attributes that are mass assignable.
      *

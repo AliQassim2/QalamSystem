@@ -12,7 +12,7 @@ class UsersController extends Controller
 {
     public function index()
     {
-        $users = User::whereNot('role', 0)->whereNot('role', 5)->whereNot('role', 4)->with([
+        $users = User::withoutGlobalScope('exclude_state_1')->whereNot('role', 0)->whereNot('role', 5)->whereNot('role', 4)->with([
             'creator',
             'schoolManager.school',
             'userAdministrator.school',
@@ -77,15 +77,22 @@ class UsersController extends Controller
         return view('Dashboard.Users.index', compact('users', 'roleStats', 'roleNames', 'userSchools', 'activeUsers'));
     }
 
-    public function toggleState(User $user)
+
+    public function toggleState($id)
     {
-        $user->state = !$user->state; // Toggle the state
+        // Fetch the user ignoring the global scope
+        $user = User::withoutGlobalScope("exclude_state_1")->findOrFail($id);
+
+        // Toggle the state
+        $user->state = !$user->state;
         $user->save();
 
         $status = $user->state ? 'activated' : 'deactivated';
+
         return redirect()->back()
             ->with('success', "User has been {$status} successfully.");
     }
+
 
     public function create()
     {

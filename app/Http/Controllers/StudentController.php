@@ -34,6 +34,7 @@ class StudentController extends Controller
     {
         return view('user_administrator.students.show', compact('student'));
     }
+
     public function search(Request $request, $searchValue)
     {
         $students = Auth::user()->userAdministrator->school->students;
@@ -80,15 +81,14 @@ class StudentController extends Controller
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'status' => 'required|in:0,1,2',
         ]);
-        // Handle photo upload if exists
-        if ($request->hasFile('photo')) {
-            $photoPath = $request->file('photo')->store('students', 'public');
-            $validatedDataStudent['photo'] = $photoPath;
-        }
         $validatedDataUser['role'] = 5;
         $user = User::create($validatedDataUser);
         $validatedDataStudent['user_id'] = $user->id;
         $student = Student::create($validatedDataStudent);
+        // Handle photo upload if exists
+        if ($request->hasFile('photo')) {
+            $student->addMediaFromRequest('photo')->toMediaCollection('studentPhotos');
+        }
 
         return redirect()->route('account.students')
             ->with('success', 'Student added successfully.');
@@ -105,6 +105,7 @@ class StudentController extends Controller
 
     public function update(Request $request, Student $student)
     {
+        // 1️⃣ Validate User fields
         $validatedDataUser = $request->validate([
             'name' => 'required|string|max:255',
             'username' => 'required|string|max:255|unique:users,username,' . $student->user_id,
@@ -113,27 +114,36 @@ class StudentController extends Controller
             'password' => 'nullable|string|min:8|confirmed',
         ]);
 
+        // 2️⃣ Validate Student fields
         $validatedDataStudent = $request->validate([
             'class_id' => 'required|exists:classes,id',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'status' => 'required|in:0,1,2',
-
         ]);
 
-        // Handle optional fields elegantly
-        $validatedDataStudent['photo'] = $request->hasFile('photo') ? $request->file('photo')->store('students', 'public') : null;
-
-        // Remove null keys so they won’t overwrite existing values
-        $validatedDataStudent = array_filter($validatedDataStudent, fn($value) => !is_null($value));
-        $validatedDataUser = array_filter($validatedDataUser, fn($value) => !is_null($value));
-
-        // Update user & student
+        // 3️⃣ Update User data
         $student->user->update($validatedDataUser);
-        $student->update($validatedDataStudent);
+
+        // 4️⃣ Update Student data (excluding photo)
+        $student->update([
+            'class_id' => $validatedDataStudent['class_id'],
+            'status' => $validatedDataStudent['status'],
+        ]);
+
+        // 5️⃣ Handle photo with Media Library
+        if ($request->hasFile('photo')) {
+            // Remove old photo from 'studentPhotos' collection
+            $student->clearMediaCollection('studentPhotos');
+
+            // Add new photo
+            $student->addMedia($request->file('photo'))
+                ->toMediaCollection('studentPhotos');
+        }
 
         return redirect()->route('account.students')
             ->with('success', 'Student updated successfully.');
     }
+
 
 
     public function destroy(Student $student)

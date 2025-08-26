@@ -204,8 +204,8 @@
             <!-- Student Photo -->
             <div class="student-photo">
                 <div class="photo-container">
-                    @if($student->photo)
-                    <img src="{{ asset('storage/' . $student->photo) }}" alt="{{ $student->name }}">
+                    @if($student->getFirstMediaUrl('studentPhotos'))
+                    <img src="{{ $student->getFirstMediaUrl('studentPhotos') }}" alt="{{ $student->user->name }}">
                     @else
                     <div class="photo-placeholder">
                         👨‍🎓

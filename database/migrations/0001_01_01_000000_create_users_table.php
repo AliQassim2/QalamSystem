@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('phone')->nullable();
             $table->tinyInteger('role')->default(0);
-            $table->tinyInteger('state')->default(0);
+            $table->tinyInteger('state')->default(1);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             // Custom token system

@@ -5,10 +5,22 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Student extends Model implements HasMedia
 {
     use InteractsWithMedia;
+    use LogsActivity;
+
+    // Configure what gets logged
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll() // log all attributes automatically
+            ->useLogName('student') // tag logs with "student"
+            ->setDescriptionForEvent(fn(string $eventName) => "Student record has been {$eventName}");
+    }
     protected $guarded = [];
 
     public function classes()

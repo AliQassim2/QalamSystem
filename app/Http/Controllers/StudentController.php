@@ -120,7 +120,9 @@ class StudentController extends Controller
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'status' => 'required|in:0,1,2',
         ]);
-
+        if ($validatedDataUser['password'] == null) {
+            unset($validatedDataUser['password']);
+        }
         // 3️⃣ Update User data
         $student->user->update($validatedDataUser);
 

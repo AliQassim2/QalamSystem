@@ -11,7 +11,11 @@ use Illuminate\Http\JsonResponse;
 
 class ClassController extends Controller
 {
-
+    public $request;
+    public function __construct(Request $request)
+    {
+        $this->request = $request;
+    }
     public function index()
     {
         $classes = Auth::user()->structureManager->school->classes()->get();
@@ -19,9 +23,9 @@ class ClassController extends Controller
         return view('school_structure.classes', compact('classes', 'stages'));
     }
 
-    public function store(Request $request)
+    public function store()
     {
-        $validated = $request->validate([
+        $validated = $this->request->validate([
             'name' => 'required|string|max:255',
             'stage_id' => 'required|exists:stages,id',
 
@@ -32,9 +36,9 @@ class ClassController extends Controller
         return redirect()->back()->with(['success', 'class created successfully.']);
     }
 
-    public function update(Request $request, SchoolClass $class)
+    public function update(SchoolClass $class)
     {
-        $validated = $request->validate([
+        $validated = $this->request->validate([
             'name' => 'required|string|max:255',
         ]);
 

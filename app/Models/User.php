@@ -58,6 +58,10 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function getRole()
+    {
+        return self::ROLES[$this->role];
+    }
     public function creator()
     {
         // Assuming 'created_by' is the foreign key in users table

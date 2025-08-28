@@ -4,8 +4,9 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
-use Spatie\Activitylog\Facades\CauserResolver;
-use Illuminate\Support\Facades\Auth;
+use App\Repositories\Eloquent\SendCodeDirectRepository;
+use App\Repositories\Eloquent\SendCodeQueueRepository;
+use App\Repositories\interface\SendCodeInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,5 +25,6 @@ class AppServiceProvider extends ServiceProvider
     {
         view()->share('AppName', 'Qalam');
         Paginator::useBootstrap();
+        $this->app->bind(SendCodeInterface::class, SendCodeQueueRepository::class);
     }
 }

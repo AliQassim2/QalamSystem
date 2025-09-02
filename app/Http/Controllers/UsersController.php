@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\School;
+use App\Http\Requests\UsersRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\QueryException;
 
@@ -100,18 +101,8 @@ class UsersController extends Controller
         return view('Dashboard.Users.form', compact('schools'));
     }
 
-    public function store(Request $request)
+    public function store(UsersRequest $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'username' => 'required|string|unique:users,username|max:255|regex:/^[a-zA-Z0-9_]+$/',
-            'email' => 'required|email|unique:users,email|max:255',
-            'phone' => 'nullable|string|max:20',
-            'role' => 'required|in:0,1,2',
-            'password' => 'required|string|min:8|confirmed',
-            'state' => 'required|boolean',
-            'school_id' => 'required|integer'
-        ]);
         $user = User::create([
             'name' => $request->name,
             'username' => $request->username,
@@ -141,17 +132,9 @@ class UsersController extends Controller
         $schools = School::orderBy('name')->get();
         return view('Dashboard.Users.form', compact('user', 'schools'));
     }
-    public function update(Request $request, User $user)
+    public function update(UsersRequest $request, User $user)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'username' => 'required|string|unique:users,username,' . $user->id . '|max:255|regex:/^[a-zA-Z0-9_]+$/',
-            'email' => 'required|email|unique:users,email,' . $user->id . '|max:255',
-            'phone' => 'nullable|string|max:20',
-            'role' => 'required|in:0,1,2',
-            'password' => 'nullable|string|min:8|confirmed',
-            'state' => 'required|boolean',
-        ]);
+
 
         $user->update([
             'name' => $request->name,

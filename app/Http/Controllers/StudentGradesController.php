@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Student;
 use App\Models\Subject;
 use App\Models\Grade;
-use App\Models\User;
 
 class StudentGradesController extends Controller
 {
